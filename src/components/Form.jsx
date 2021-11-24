@@ -4,10 +4,7 @@ import { connect } from 'react-redux';
 import { actionAddExpense, fetchValues } from '../actions';
 
 const optionsTag = ['Alimentação', 'Lazer', 'Trabalho', 'Transporte', 'Saúde'];
-const optionsValues = [
-  'USD', 'CAD', 'EUR', 'GBP', 'ARS', 'BTC', 'LTC',
-  'JPY', 'CHF', 'AUD', 'CNY', 'ILS', 'ETH', 'XRP',
-];
+const optionsPayment = ['Dinheiro', 'Cartão de crédito', 'Cartão de débito'];
 
 class Form extends React.Component {
   constructor(props) {
@@ -25,9 +22,9 @@ class Form extends React.Component {
     this.handleDispatch = this.handleDispatch.bind(this);
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     const { fetchCoins } = this.props;
-    fetchCoins();
+    await fetchCoins();
   }
 
   setObjExpense({ value, description, currency, method, tag }, expenses, exchangeRates) {
@@ -71,6 +68,7 @@ class Form extends React.Component {
 
   render() {
     const { value, description } = this.state;
+    const { exchangeRates } = this.props;
     return (
       <form onSubmit={ this.handleSubmit }>
         Valor:
@@ -81,27 +79,25 @@ class Form extends React.Component {
           onChange={ this.handleChange }
           value={ value }
         />
-        Moeda:
-        <select
-          data-testid="currency-input"
-          name="currency"
-          onChange={ this.handleChange }
-        >
-          {optionsValues.map((coin) => (
-            <option key={ coin }>{coin}</option>
-          ))}
-        </select>
+        <label htmlFor="currency">
+          Moeda
+          <select
+            data-testid="currency-input"
+            name="currency"
+            onChange={ this.handleChange }
+            id="currency"
+          >
+            {exchangeRates && Object.keys(exchangeRates).filter((curr) => curr !== 'USDT')
+              .map((coin) => (<option key={ coin }>{coin}</option>))}
+          </select>
+        </label>
         Método de Pagamento:
         <select data-testid="method-input" name="method" onChange={ this.handleChange }>
-          <option>Dinheiro</option>
-          <option>Cartão de crédito</option>
-          <option>Cartão de débito</option>
+          {optionsPayment.map((curr) => (<option key={ curr }>{curr}</option>))}
         </select>
         Tag:
         <select data-testid="tag-input" name="tag" onChange={ this.handleChange }>
-          {optionsTag.map((tag) => (
-            <option key={ tag }>{tag}</option>
-          ))}
+          {optionsTag.map((tag) => (<option key={ tag }>{tag}</option>))}
         </select>
         Descrição:
         <input
