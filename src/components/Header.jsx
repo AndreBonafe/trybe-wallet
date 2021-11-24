@@ -15,7 +15,7 @@ class Header extends React.Component {
     const values = expenses.map(
       (exps) => parseFloat(exps.value) * parseFloat(this.findAsk(exps)),
     );
-    if (values.length > 0) return values.reduce((a, b) => a + b);
+    if (expenses.length > 0) return values.reduce((a, b) => a + b);
     return 0;
   }
 

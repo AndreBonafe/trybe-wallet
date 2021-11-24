@@ -3,6 +3,7 @@ export const LOGIN = 'LOGIN';
 export const ADD_EXPENSE = 'ADD_EXPENSE';
 export const GET_VALUES = 'GET_VALUES';
 export const REQUEST_VALUES = 'REQUEST_VALUES';
+export const DELETE_ITEM = 'DELETE_ITEM';
 
 export const actionLogin = ({ email }) => ({
   type: LOGIN,
@@ -12,6 +13,11 @@ export const actionLogin = ({ email }) => ({
 export const actionAddExpense = (expense) => ({
   type: ADD_EXPENSE,
   expense,
+});
+
+export const actionDeleteItem = (id) => ({
+  type: DELETE_ITEM,
+  id,
 });
 
 const actionGetValues = (json) => ({
