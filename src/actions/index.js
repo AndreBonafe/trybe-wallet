@@ -9,7 +9,7 @@ export const actionLogin = ({ email }) => ({
   email,
 });
 
-export const actionAddExpense = (expense, value) => ({
+export const actionAddExpense = (expense) => ({
   type: ADD_EXPENSE,
   expense,
 });

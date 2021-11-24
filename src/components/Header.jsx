@@ -1,12 +1,21 @@
 import React from 'react';
-import { string } from 'prop-types';
+import { string, objectOf } from 'prop-types';
 import { connect } from 'react-redux';
 
 class Header extends React.Component {
+  findAsk(expenses) {
+    const currencyCerto = Object.values(expenses.exchangeRates)
+      .find((curr) => expenses.currency === curr.code);
+    const rateValue = currencyCerto.ask;
+    return rateValue;
+  }
+
   attTotal() {
     const { expenses } = this.props;
-    const values = expenses.map((exps) => parseFloat(exps.value) * parseFloat(exps.exchangeRates.[exps.currency].ask));
-    if(values.length > 0) return values.reduce((a, b) => a + b);
+    const values = expenses.map(
+      (exps) => parseFloat(exps.value) * parseFloat(this.findAsk(exps)),
+    );
+    if (values.length > 0) return values.reduce((a, b) => a + b);
     return 0;
   }
 
@@ -30,6 +39,7 @@ class Header extends React.Component {
 
 Header.propTypes = {
   email: string.isRequired,
+  expenses: objectOf().isRequired,
 };
 
 const mapStateToProps = (state) => ({
