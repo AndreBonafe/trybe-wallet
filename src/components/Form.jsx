@@ -20,6 +20,7 @@ class Form extends React.Component {
       currency: 'CAD',
       method: 'Dinheiro',
       tag: 'Alimentação',
+      canAtt: true,
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -63,6 +64,11 @@ class Form extends React.Component {
     await fetchCoins();
     const { exchangeRates } = this.props;
     const obj = this.setObjExpense(this.state, expenses, exchangeRates);
+    if (isEditing) {
+      replaceExpense(obj);
+      changeEditing(false);
+      console.log(obj);
+    } else saveExpenses(obj);
     this.setState({
       value: 0,
       description: '',
@@ -70,11 +76,6 @@ class Form extends React.Component {
       method: 'Dinheiro',
       tag: '',
     });
-    if (isEditing) {
-      replaceExpense(obj);
-      changeEditing(false);
-      console.log(obj);
-    } else saveExpenses(obj);
   }
 
   handleSubmit(e) {

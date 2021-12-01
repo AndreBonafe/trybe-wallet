@@ -45,8 +45,8 @@ ButtonsTable.propTypes = {
   changeEditing: PropTypes.func.isRequired,
   deleteItem: PropTypes.func.isRequired,
   id: PropTypes.number.isRequired,
-  isEditing: PropTypes.bool.isRequired,
   getEditingValue: PropTypes.func.isRequired,
+  isEditing: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = (state) => ({

@@ -48,7 +48,7 @@ describe('9 - Crie um botão para editar uma despesa da tabela contendo as segui
 
     expect(totalField).toContainHTML('187.12');
     fireEvent.click(editButton);
-    
+
     await waitFor(() => {
       expect(
         screen.getByRole('cell', { name: 'Cem dólares canadenses' })
