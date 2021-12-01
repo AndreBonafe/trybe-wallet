@@ -142,7 +142,7 @@ Form.propTypes = {
     PropTypes.string,
   ]),
   fetchCoins: PropTypes.func,
-  isEditing: PropTypes.any,
+  isEditing: PropTypes.bool,
   replaceExpense: PropTypes.func,
   saveExpenses: PropTypes.func,
   changeEditing: PropTypes.func,
