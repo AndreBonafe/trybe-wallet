@@ -1,10 +1,17 @@
-import { ADD_EXPENSE, DELETE_ITEM, GET_VALUES } from '../actions';
+import {
+  ADD_EXPENSE,
+  CHANGE_EDITING,
+  DELETE_ITEM,
+  GET_EDIT_VALUE,
+  GET_VALUES,
+  REPLACE_VALUE } from '../actions';
 
 const INITIAL_STATE = {
   currencies: [],
   expenses: [],
   values: {},
-  expensesValues: [],
+  editingValue: {},
+  isEditing: false,
 };
 
 function wallet(state = INITIAL_STATE, action) {
@@ -13,7 +20,6 @@ function wallet(state = INITIAL_STATE, action) {
     return {
       ...state,
       expenses: [...state.expenses, action.expense],
-      expensesValues: [...state.expensesValues, action.value],
     };
   case GET_VALUES:
     return {
@@ -24,6 +30,22 @@ function wallet(state = INITIAL_STATE, action) {
     return {
       ...state,
       expenses: state.expenses.filter((curr) => curr.id !== action.id),
+    };
+  case GET_EDIT_VALUE:
+    return {
+      ...state,
+      editingValue: state.expenses.find((curr) => curr.id === Number(action.id)),
+    };
+  case REPLACE_VALUE:
+    return {
+      ...state,
+      expenses: state.expenses.map((item) => (
+        item.id === action.newValue.id ? action.newValue : item)),
+    };
+  case CHANGE_EDITING:
+    return {
+      ...state,
+      isEditing: action.isEditing,
     };
   default:
     return state;

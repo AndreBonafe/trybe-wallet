@@ -1,13 +1,12 @@
+import PropTypes from 'prop-types';
 import React from 'react';
-import { string, objectOf } from 'prop-types';
 import { connect } from 'react-redux';
 
 class Header extends React.Component {
   findAsk(expenses) {
     const currencyCerto = Object.values(expenses.exchangeRates)
       .find((curr) => expenses.currency === curr.code);
-    const rateValue = currencyCerto.ask;
-    return rateValue;
+    return currencyCerto.ask;
   }
 
   attTotal() {
@@ -15,8 +14,7 @@ class Header extends React.Component {
     const values = expenses.map(
       (exps) => parseFloat(exps.value) * parseFloat(this.findAsk(exps)),
     );
-    if (expenses.length > 0) return values.reduce((a, b) => a + b);
-    return 0;
+    return expenses.length > 0 ? values.reduce((a, b) => a + b) : 0;
   }
 
   render() {
@@ -27,7 +25,7 @@ class Header extends React.Component {
           { `Email: ${email}` }
         </span>
         <span data-testid="total-field">
-          {`Despesa Total: ${this.attTotal().toFixed([2])}`}
+          {`Despesa Total: ${(this.attTotal()).toFixed([2])}`}
         </span>
         <span data-testid="header-currency-field">
           BRL
@@ -38,9 +36,12 @@ class Header extends React.Component {
 }
 
 Header.propTypes = {
-  email: string.isRequired,
-  expenses: objectOf().isRequired,
-};
+  email: PropTypes.string,
+  expenses: PropTypes.shape({
+    length: PropTypes.number,
+    map: PropTypes.func,
+  }),
+}.isRequired;
 
 const mapStateToProps = (state) => ({
   email: state.user.email,

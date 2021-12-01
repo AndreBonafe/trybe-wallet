@@ -1,7 +1,11 @@
+import PropTypes from 'prop-types';
 import React from 'react';
-import { func, objectOf, arrayOf } from 'prop-types';
 import { connect } from 'react-redux';
-import { actionAddExpense, fetchValues } from '../actions';
+import {
+  actionAddExpense,
+  actionChangeEditing,
+  actionReplaceValue,
+  fetchValues } from '../actions';
 
 const optionsTag = ['Alimentação', 'Lazer', 'Trabalho', 'Transporte', 'Saúde'];
 const optionsPayment = ['Dinheiro', 'Cartão de crédito', 'Cartão de débito'];
@@ -13,7 +17,7 @@ class Form extends React.Component {
     this.state = {
       value: 0,
       description: '',
-      currency: 'USD',
+      currency: 'CAD',
       method: 'Dinheiro',
       tag: 'Alimentação',
     };
@@ -28,14 +32,15 @@ class Form extends React.Component {
   }
 
   setObjExpense({ value, description, currency, method, tag }, expenses, exchangeRates) {
+    const { editingValue, isEditing } = this.props;
     return {
-      id: expenses.length,
+      id: isEditing ? editingValue.id : expenses.length,
       value,
       currency,
       method,
       tag,
       description,
-      exchangeRates,
+      exchangeRates: isEditing ? editingValue.exchangeRates : exchangeRates,
     };
   }
 
@@ -46,20 +51,30 @@ class Form extends React.Component {
     });
   }
 
-  handleDispatch() {
-    const { saveExpenses, fetchCoins, expenses } = this.props;
-    fetchCoins();
+  async handleDispatch() {
+    const {
+      saveExpenses,
+      fetchCoins,
+      expenses,
+      replaceExpense,
+      isEditing,
+      changeEditing,
+    } = this.props;
+    await fetchCoins();
     const { exchangeRates } = this.props;
     const obj = this.setObjExpense(this.state, expenses, exchangeRates);
     this.setState({
       value: 0,
       description: '',
-      currency: '',
-      method: '',
+      currency: 'CAD',
+      method: 'Dinheiro',
       tag: '',
-      valueCurrency: 0,
     });
-    return saveExpenses(obj);
+    if (isEditing) {
+      replaceExpense(obj);
+      changeEditing(false);
+      console.log(obj);
+    } else saveExpenses(obj);
   }
 
   handleSubmit(e) {
@@ -68,7 +83,7 @@ class Form extends React.Component {
 
   render() {
     const { value, description } = this.state;
-    const { exchangeRates } = this.props;
+    const { exchangeRates, isEditing } = this.props;
     return (
       <form onSubmit={ this.handleSubmit }>
         Valor:
@@ -107,8 +122,11 @@ class Form extends React.Component {
           onChange={ this.handleChange }
           value={ description }
         />
-        <button type="submit" onClick={ () => this.handleDispatch() }>
-          Adicionar despesa
+        <button
+          type="submit"
+          onClick={ () => this.handleDispatch() }
+        >
+          {isEditing ? 'Editar despesa' : 'Adicionar despesa'}
         </button>
       </form>
     );
@@ -116,20 +134,32 @@ class Form extends React.Component {
 }
 
 Form.propTypes = {
-  expenses: arrayOf().isRequired,
-  exchangeRates: objectOf().isRequired,
-  saveExpenses: func.isRequired,
-  fetchCoins: func.isRequired,
-};
+  editingValue: PropTypes.shape({
+    id: PropTypes.number,
+  }),
+  exchangeRates: PropTypes.func,
+  expenses: PropTypes.shape([
+    PropTypes.string,
+  ]),
+  fetchCoins: PropTypes.func,
+  isEditing: PropTypes.any,
+  replaceExpense: PropTypes.func,
+  saveExpenses: PropTypes.func,
+  changeEditing: PropTypes.func,
+}.isRequired;
 
 const mapStateToProps = (state) => ({
   expenses: state.wallet.expenses,
   exchangeRates: state.wallet.values,
+  editingValue: state.wallet.editingValue,
+  isEditing: state.wallet.isEditing,
 });
 
 const mapDispatchtoProps = (dispatch) => ({
   saveExpenses: (obj) => dispatch(actionAddExpense(obj)),
   fetchCoins: () => dispatch(fetchValues()),
+  replaceExpense: (newValue) => dispatch(actionReplaceValue(newValue)),
+  changeEditing: (bool) => dispatch(actionChangeEditing(bool)),
 });
 
 export default connect(mapStateToProps, mapDispatchtoProps)(Form);
