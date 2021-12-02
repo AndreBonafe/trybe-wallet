@@ -52,7 +52,7 @@ class Form extends React.Component {
     });
   }
 
-  async handleDispatch() {
+  handleDispatch() {
     const {
       saveExpenses,
       fetchCoins,
@@ -60,9 +60,9 @@ class Form extends React.Component {
       replaceExpense,
       isEditing,
       changeEditing,
+      exchangeRates,
     } = this.props;
-    await fetchCoins();
-    const { exchangeRates } = this.props;
+    fetchCoins();
     const obj = this.setObjExpense(this.state, expenses, exchangeRates);
     if (isEditing) {
       replaceExpense(obj);
