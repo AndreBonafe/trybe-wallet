@@ -5,10 +5,9 @@ import {
   actionAddExpense,
   actionChangeEditing,
   actionReplaceValue,
-  fetchValues } from '../actions';
-
-const optionsTag = ['Alimentação', 'Lazer', 'Trabalho', 'Transporte', 'Saúde'];
-const optionsPayment = ['Dinheiro', 'Cartão de crédito', 'Cartão de débito'];
+  fetchValues,
+  actionEditValue } from '../actions';
+import Selects from './Selects';
 
 class Form extends React.Component {
   constructor(props) {
@@ -17,7 +16,7 @@ class Form extends React.Component {
     this.state = {
       value: 0,
       description: '',
-      currency: 'CAD',
+      currency: 'USD',
       method: 'Dinheiro',
       tag: 'Alimentação',
       canAtt: true,
@@ -33,15 +32,14 @@ class Form extends React.Component {
   }
 
   setObjExpense({ value, description, currency, method, tag }, expenses, exchangeRates) {
-    const { editingValue, isEditing } = this.props;
     return {
-      id: isEditing ? editingValue.id : expenses.length,
+      id: expenses.length,
       value,
       currency,
       method,
       tag,
       description,
-      exchangeRates: isEditing ? editingValue.exchangeRates : exchangeRates,
+      exchangeRates,
     };
   }
 
@@ -61,20 +59,20 @@ class Form extends React.Component {
       isEditing,
       changeEditing,
       exchangeRates,
+      editingValue,
     } = this.props;
     fetchCoins();
     const obj = this.setObjExpense(this.state, expenses, exchangeRates);
     if (isEditing) {
-      replaceExpense(obj);
+      replaceExpense(editingValue);
       changeEditing(false);
-      console.log(obj);
     } else saveExpenses(obj);
     this.setState({
       value: 0,
       description: '',
-      currency: 'CAD',
+      currency: 'USD',
       method: 'Dinheiro',
-      tag: '',
+      tag: 'Alimentação',
     });
   }
 
@@ -83,45 +81,37 @@ class Form extends React.Component {
   }
 
   render() {
-    const { value, description } = this.state;
-    const { exchangeRates, isEditing } = this.props;
+    const { value, description, currency, method, tag } = this.state;
+    const { exchangeRates, isEditing, editingValue, EditValue } = this.props;
     return (
-      <form onSubmit={ this.handleSubmit }>
+      <form onSubmit={ this.handleSubmit } className={ isEditing ? 'edit' : 'new-value' }>
         Valor:
         <input
           type="text"
           data-testid="value-input"
           name="value"
-          onChange={ this.handleChange }
-          value={ value }
+          onChange={ isEditing ? ({ target }) => EditValue({
+            ...editingValue,
+            value: target.value }) : this.handleChange }
+          value={ isEditing ? editingValue.value : value }
         />
-        <label htmlFor="currency">
-          Moeda
-          <select
-            data-testid="currency-input"
-            name="currency"
-            onChange={ this.handleChange }
-            id="currency"
-          >
-            {exchangeRates && Object.keys(exchangeRates).filter((curr) => curr !== 'USDT')
-              .map((coin) => (<option key={ coin }>{coin}</option>))}
-          </select>
-        </label>
-        Método de Pagamento:
-        <select data-testid="method-input" name="method" onChange={ this.handleChange }>
-          {optionsPayment.map((curr) => (<option key={ curr }>{curr}</option>))}
-        </select>
-        Tag:
-        <select data-testid="tag-input" name="tag" onChange={ this.handleChange }>
-          {optionsTag.map((tag) => (<option key={ tag }>{tag}</option>))}
-        </select>
+        {exchangeRates && <Selects
+          isEditing={ isEditing }
+          EditValue={ EditValue }
+          handleChange={ this.handleChange }
+          editingValue={ editingValue }
+          exchangeRates={ exchangeRates }
+          values={ { currency, method, tag } }
+        />}
         Descrição:
         <input
           type="text"
           data-testid="description-input"
           name="description"
-          onChange={ this.handleChange }
-          value={ description }
+          onChange={ isEditing ? ({ target }) => EditValue({
+            ...editingValue,
+            description: target.value }) : this.handleChange }
+          value={ isEditing ? editingValue.description : description }
         />
         <button
           type="submit"
@@ -161,6 +151,7 @@ const mapDispatchtoProps = (dispatch) => ({
   fetchCoins: () => dispatch(fetchValues()),
   replaceExpense: (newValue) => dispatch(actionReplaceValue(newValue)),
   changeEditing: (bool) => dispatch(actionChangeEditing(bool)),
+  EditValue: (newValue) => dispatch(actionEditValue(newValue)),
 });
 
 export default connect(mapStateToProps, mapDispatchtoProps)(Form);

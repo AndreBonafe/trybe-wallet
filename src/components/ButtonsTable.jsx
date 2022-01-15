@@ -1,6 +1,8 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { FaTrashAlt } from 'react-icons/fa';
+import { AiFillEdit } from 'react-icons/ai';
 import { actionChangeEditing, actionGetEditingValue } from '../actions';
 
 class ButtonsTable extends Component {
@@ -19,14 +21,14 @@ class ButtonsTable extends Component {
   render() {
     const { deleteItem, id, isEditing } = this.props;
     return (
-      <td>
+      <td className="buttons">
         <button
           type="button"
           data-testid="edit-btn"
           id={ id }
           onClick={ this.enterEditingMode }
         >
-          Editar
+          <AiFillEdit />
         </button>
         <button
           type="button"
@@ -34,7 +36,7 @@ class ButtonsTable extends Component {
           onClick={ () => deleteItem(id) }
           disabled={ isEditing }
         >
-          Excluir
+          <FaTrashAlt />
         </button>
       </td>
     );

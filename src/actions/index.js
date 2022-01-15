@@ -7,6 +7,7 @@ export const DELETE_ITEM = 'DELETE_ITEM';
 export const GET_EDIT_VALUE = 'GET_EDIT_VALUE';
 export const REPLACE_VALUE = 'REPLACE_VALUE';
 export const CHANGE_EDITING = 'CHANGE_EDITING';
+export const CHANGE_EDIT = 'CHANGE_EDIT';
 
 export const actionLogin = ({ email }) => ({
   type: LOGIN,
@@ -36,6 +37,11 @@ export const actionReplaceValue = (newValue) => ({
 export const actionChangeEditing = (bool) => ({
   type: CHANGE_EDITING,
   isEditing: bool,
+});
+
+export const actionEditValue = (newValue) => ({
+  type: CHANGE_EDIT,
+  newValue,
 });
 
 const actionGetValues = (json) => ({

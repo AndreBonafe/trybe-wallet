@@ -4,7 +4,8 @@ import {
   DELETE_ITEM,
   GET_EDIT_VALUE,
   GET_VALUES,
-  REPLACE_VALUE } from '../actions';
+  REPLACE_VALUE,
+  CHANGE_EDIT } from '../actions';
 
 const INITIAL_STATE = {
   currencies: [],
@@ -46,6 +47,11 @@ function wallet(state = INITIAL_STATE, action) {
     return {
       ...state,
       isEditing: action.isEditing,
+    };
+  case CHANGE_EDIT:
+    return {
+      ...state,
+      editingValue: action.newValue,
     };
   default:
     return state;

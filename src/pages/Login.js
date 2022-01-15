@@ -2,7 +2,9 @@ import React from 'react';
 import { func } from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { AiOutlineArrowRight } from 'react-icons/ai';
 import { actionLogin } from '../actions';
+import '../styles/Login.css';
 
 class Login extends React.Component {
   constructor(props) {
@@ -42,40 +44,44 @@ class Login extends React.Component {
   render() {
     const { login } = this.props;
     return (
-      <form onSubmit={ this.handleSubmit }>
-        <label htmlFor="email-input">
-          Email:
-          <input
-            data-testid="email-input"
-            type="email"
-            name="email"
-            id="email-input"
-            onChange={ this.handleChange }
-            required
-          />
-        </label>
-        <label htmlFor="password-input">
-          Senha:
-          <input
-            data-testid="password-input"
-            type="password"
-            name="password"
-            id="password-input"
-            minLength={ 6 }
-            onChange={ this.handleChange }
-            required
-          />
-        </label>
-        <Link to="/carteira">
-          <button
-            type="submit"
-            onClick={ () => login(this.state) }
-            disabled={ this.checkButton() }
-          >
-            Entrar
-          </button>
-        </Link>
-      </form>
+      <div className="login-wrapper">
+        <h1>Trybe Wallet</h1>
+        <form onSubmit={ this.handleSubmit } className="login-form">
+          <label htmlFor="email-input">
+            <span>Email:</span>
+            <input
+              data-testid="email-input"
+              type="email"
+              name="email"
+              id="email-input"
+              onChange={ this.handleChange }
+              required
+            />
+          </label>
+          <label htmlFor="password-input">
+            <span>Senha:</span>
+            <input
+              data-testid="password-input"
+              type="password"
+              name="password"
+              id="password-input"
+              minLength={ 6 }
+              onChange={ this.handleChange }
+              required
+            />
+          </label>
+          <Link to="/carteira">
+            <button
+              type="submit"
+              onClick={ () => login(this.state) }
+              disabled={ this.checkButton() }
+            >
+              Entrar
+              <AiOutlineArrowRight className="arrow" />
+            </button>
+          </Link>
+        </form>
+      </div>
     );
   }
 }

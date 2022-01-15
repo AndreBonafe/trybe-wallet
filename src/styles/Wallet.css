@@ -1,0 +1,149 @@
+@keyframes flip-horizontal-bottom-value {
+
+  0% {
+    transform: rotateX(0);
+  }
+
+  100% {
+    transform: rotateX(-360deg);
+  }
+}
+
+@keyframes flip-horizontal-bottom-edit {
+
+  0% {
+    transform: rotateX(0);
+  }
+
+  100% {
+    transform: rotateX(-360deg);
+  }
+}
+
+.site-wrapper {
+  background: linear-gradient(156deg, #f5b46e 0%, #b7dbe8 66%, #5291a8 92%);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  position: absolute;
+  width: 100%;
+}
+
+.header-wrapper {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 8px;
+}
+
+.header-value {
+  display: flex;
+}
+
+label {
+  align-self: center;
+  margin-bottom: 18.5px;
+}
+
+select {
+  background: none;
+  border: none;
+  border-radius: 20px;
+  box-shadow: 4px 3px 9px 4px rgba(0, 0, 0, 0.29);
+  height: 30px;
+}
+
+.new-value {
+  align-items: center;
+  align-self: center;
+  animation: flip-horizontal-bottom-value 0.4s
+    cubic-bezier(0.455, 0.03, 0.515, 0.955) both;
+  border-radius: 20px;
+  box-shadow: 7px 5px 18px 8px rgba(0, 0, 0, 0.29);
+  display: flex;
+  flex-direction: row;
+  height: 100px;
+  margin-bottom: 50px;
+  padding: 5px;
+  width: 85%;
+}
+
+.new-value button {
+  align-self: center;
+  margin: 0 10px;
+  width: 70%;
+}
+
+.new-value input {
+  align-self: center;
+  margin: 0 10px;
+  width: 70%;
+}
+
+.new-value select {
+  align-self: center;
+  margin: 0 10px;
+  width: 95%;
+}
+
+table {
+  align-self: center;
+  box-shadow: 15px 10px 30px 6px rgba(0, 0, 0, 0.29);
+  text-align: center;
+  width: 95%;
+}
+
+th {
+  box-shadow: 5px 3px 15px 3px rgba(0, 0, 0, 0.29);
+}
+
+td {
+  box-shadow: 5px 3px 10px 3px rgba(0, 0, 0, 0.29);
+}
+
+.buttons {
+  display: flex;
+  justify-content: space-between;
+  margin: 0;
+  padding: 0;
+}
+
+.buttons button {
+  margin: 15px 5px;
+  padding: 0;
+}
+
+.edit {
+  align-items: center;
+  align-self: center;
+  animation: flip-horizontal-bottom-edit 0.4s
+    cubic-bezier(0.455, 0.03, 0.515, 0.955) both;
+  border-radius: 20px;
+  box-shadow: 7px 5px 18px 8px rgba(77, 48, 6, 0.15);
+  display: flex;
+  flex-direction: row;
+  height: 100px;
+  margin-bottom: 50px;
+  padding: 5px;
+  width: 85%;
+}
+
+.edit button {
+  align-self: center;
+  box-shadow: 7px 5px 18px 8px rgba(77, 48, 6, 0.15);
+  margin: 0 10px;
+  width: 70%;
+}
+
+.edit input {
+  align-self: center;
+  box-shadow: 7px 5px 18px 8px rgba(77, 48, 6, 0.15);
+  margin: 0 10px;
+  width: 70%;
+}
+
+.edit select {
+  align-self: center;
+  box-shadow: 7px 5px 18px 8px rgba(77, 48, 6, 0.15);
+  margin: 0 10px;
+  width: 95%;
+}
